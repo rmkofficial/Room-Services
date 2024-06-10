@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import moreDetailsIcon from "../../assets/more-details/moreDetails.png";
+import laundryIcon from "../../assets/delay-category/Laundry.png";
+import murIcon from "../../assets/delay-category/MUR.png";
 import waitingAckIcon from "../../assets/acknowledgement/Waiting.png";
 import alertIcon from "../../assets/status-icons/Error.png";
 import successIcon from "../../assets/status-icons/Success.png";
@@ -106,6 +108,17 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
     page * rowsPerPage + rowsPerPage
   );
 
+  const getCategoryIcon = (delayCategory) => {
+    switch (delayCategory) {
+      case "Laundry":
+        return laundryIcon;
+      case "MUR":
+        return murIcon;
+      default:
+        return null;
+    }
+  };
+
   return (
     <TableBody>
       {paginatedData.map((row) => (
@@ -125,6 +138,13 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
 
           <TableCell sx={{ color: "white", padding: "16px" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
+              {getCategoryIcon(row.delayCategory) && (
+                <img
+                  src={getCategoryIcon(row.delayCategory)}
+                  alt={row.delayCategory}
+                  style={{ width: "28px", height: "28px", marginRight: "12px" }}
+                />
+              )}
               <Typography sx={{ color: "white", fontSize: "18px" }}>
                 {row.delayCategory}
               </Typography>
