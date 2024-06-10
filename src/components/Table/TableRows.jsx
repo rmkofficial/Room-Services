@@ -94,7 +94,8 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
   };
 
   const sortedData = localData.sort((a, b) => {
-    if (orderBy === "ackTime" || orderBy === "incidentTime") {
+    if (orderBy === "ackTime" || orderBy === "activation") {
+      // incidentTime => activation
       const dateA = parseDateString(a[orderBy]);
       const dateB = parseDateString(b[orderBy]);
       return order === "asc" ? dateA - dateB : dateB - dateA;
@@ -110,8 +111,9 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
     page * rowsPerPage + rowsPerPage
   );
 
-  const getCategoryIcon = (category) => {
-    switch (category) {
+  const getCategoryIcon = (delayCategory) => {
+    // category => delayCategory
+    switch (delayCategory) {
       case "Lighting":
         return lightingIcon;
       case "HVAC":
@@ -147,22 +149,23 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
               </Typography>
             </Box>
           </TableCell>
-          <TableCell sx={{ color: "white", padding: "16px", fontSize: "18px" }}>
-            {row.incidentTime}
-          </TableCell>
+
           <TableCell sx={{ color: "white", padding: "16px" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              {getCategoryIcon(row.category) && (
+              {getCategoryIcon(row.delayCategory) && (
                 <img
-                  src={getCategoryIcon(row.category)}
-                  alt={row.category}
+                  src={getCategoryIcon(row.delayCategory)}
+                  alt={row.delayCategory}
                   style={{ width: "28px", height: "28px", marginRight: "12px" }}
                 />
               )}
               <Typography sx={{ color: "white", fontSize: "18px" }}>
-                {row.category}
+                {row.delayCategory}
               </Typography>
             </Box>
+          </TableCell>
+          <TableCell sx={{ color: "white", padding: "16px", fontSize: "18px" }}>
+            {row.activation}
           </TableCell>
           <TableCell sx={{ padding: "16px" }}>
             <Chip

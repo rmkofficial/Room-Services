@@ -8,8 +8,8 @@ const TableHeader = ({ order, orderBy, onRequestSort }) => {
 
   const headCells = [
     { id: "malfunction", label: "Malfunction" },
-    { id: "category", label: "Category" },
-    { id: "incidentTime", label: "Incident Time" },
+    { id: "delayCategory", label: "Delay Category" }, // category değiştirildi
+    { id: "activation", label: "Activation" }, // incidentTime değiştirildi
     { id: "acknowledgement", label: "Acknowledgement" },
     { id: "ackTime", label: "Ack. Time" },
     { id: "status", label: "Status" },
@@ -31,7 +31,7 @@ const TableHeader = ({ order, orderBy, onRequestSort }) => {
               onClick={createSortHandler(headCell.id)}
               sx={{
                 color: "white",
-                fontSize: "20px", 
+                fontSize: "20px",
                 "&:hover": {
                   color: "lightgray",
                 },
