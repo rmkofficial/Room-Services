@@ -7,9 +7,9 @@ const TableHeader = ({ order, orderBy, onRequestSort }) => {
   };
 
   const headCells = [
-    { id: "malfunction", label: "Malfunction" },
-    { id: "delayCategory", label: "Delay Category" }, // category değiştirildi
-    { id: "activation", label: "Activation" }, // incidentTime değiştirildi
+    { id: "roomId", label: "Room ID" },
+    { id: "delayCategory", label: "Delay Category" },
+    { id: "activation", label: "Activation" },
     { id: "acknowledgement", label: "Acknowledgement" },
     { id: "ackTime", label: "Ack. Time" },
     { id: "status", label: "Status" },

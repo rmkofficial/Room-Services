@@ -9,13 +9,6 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import moreDetailsIcon from "../../assets/more-details/moreDetails.png";
-import lightingIcon from "../../assets/category/Lighting.png";
-import hvacIcon from "../../assets/category/HVAC.png";
-import rcuIcon from "../../assets/category/RCU.png";
-import doorSystIcon from "../../assets/category/DoorSyst.png";
-import pmsIcon from "../../assets/category/PMS.png";
-import openDoorIcon from "../../assets/category/OpenDoor.png";
-import longInactIcon from "../../assets/category/LongInact.png";
 import waitingAckIcon from "../../assets/acknowledgement/Waiting.png";
 import alertIcon from "../../assets/status-icons/Error.png";
 import successIcon from "../../assets/status-icons/Success.png";
@@ -84,7 +77,7 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
   const timeStyle = { color: "white", fontSize: "0.875rem", marginTop: 1 };
 
   const parseDateString = (dateString) => {
-    if (!dateString) return new Date(0); // boş tarih varsa sıralama için eski bir tarih döndür
+    if (!dateString) return new Date(0);
     const [date, time, period] = dateString.split(" ");
     const [year, month, day] = date.split("-");
     const [hours, minutes] = time.split(":");
@@ -94,15 +87,17 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
   };
 
   const sortedData = localData.sort((a, b) => {
+    const aValue = a[orderBy] || "";
+    const bValue = b[orderBy] || "";
+
     if (orderBy === "ackTime" || orderBy === "activation") {
-      // incidentTime => activation
-      const dateA = parseDateString(a[orderBy]);
-      const dateB = parseDateString(b[orderBy]);
+      const dateA = parseDateString(aValue);
+      const dateB = parseDateString(bValue);
       return order === "asc" ? dateA - dateB : dateB - dateA;
     } else {
       return order === "asc"
-        ? a[orderBy].localeCompare(b[orderBy])
-        : b[orderBy].localeCompare(a[orderBy]);
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     }
   });
 
@@ -110,28 +105,6 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-
-  const getCategoryIcon = (delayCategory) => {
-    // category => delayCategory
-    switch (delayCategory) {
-      case "Lighting":
-        return lightingIcon;
-      case "HVAC":
-        return hvacIcon;
-      case "RCU":
-        return rcuIcon;
-      case "Door Syst.":
-        return doorSystIcon;
-      case "PMS":
-        return pmsIcon;
-      case "Open Door":
-        return openDoorIcon;
-      case "Long Inact.":
-        return longInactIcon;
-      default:
-        return null;
-    }
-  };
 
   return (
     <TableBody>
@@ -145,20 +118,13 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
                 style={{ width: "28px", height: "28px", marginRight: "12px" }}
               />
               <Typography sx={{ color: "white", fontSize: "18px" }}>
-                {row.malfunction}
+                {row.roomId}
               </Typography>
             </Box>
           </TableCell>
 
           <TableCell sx={{ color: "white", padding: "16px" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              {getCategoryIcon(row.delayCategory) && (
-                <img
-                  src={getCategoryIcon(row.delayCategory)}
-                  alt={row.delayCategory}
-                  style={{ width: "28px", height: "28px", marginRight: "12px" }}
-                />
-              )}
               <Typography sx={{ color: "white", fontSize: "18px" }}>
                 {row.delayCategory}
               </Typography>
