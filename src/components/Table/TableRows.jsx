@@ -189,6 +189,10 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
               }
               sx={{
                 ...getChipColor(row.acknowledgement),
+                backgroundColor:
+                  row.acknowledgement === ""
+                    ? "rgba(71,70,71,255)"
+                    : getChipColor(row.acknowledgement).backgroundColor,
                 color: "white",
                 fontSize: "16px",
                 cursor:
