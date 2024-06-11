@@ -14,6 +14,7 @@ import murIcon from "../../assets/delay-category/MUR.png";
 import waitingAckIcon from "../../assets/acknowledgement/Waiting.png";
 import alertIcon from "../../assets/status-icons/Error.png";
 import successIcon from "../../assets/status-icons/Success.png";
+import statusAlertIcon from "../../assets/status-icons/status-button/Error-Resp.png";
 
 const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
   const [localData, setLocalData] = useState(data);
@@ -48,12 +49,13 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
     setLocalData(updatedData);
   };
 
-  const handleFix = (id) => {
+  const handleFix = (id, category) => {
     const updatedData = localData.map((row) => {
       if (row.id === id) {
+        const newStatus = category === "MUR" ? "Cleaned" : "Collected";
         return {
           ...row,
-          status: "Fixed",
+          status: newStatus,
           fixedTime: formatDateTime(new Date()),
         };
       }
@@ -67,12 +69,16 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
   };
 
   const getChipColor = (status) => {
-    if (status === "Acknowledged" || status === "Fixed") {
-      return { backgroundColor: "green", color: "white" };
-    } else if (status === "Waiting Ack." || status === "Waiting Repair") {
-      return { backgroundColor: "red", color: "white" };
-    } else {
-      return { backgroundColor: "default", color: "default" };
+    switch (status) {
+      case "Acknowledged":
+      case "Cleaned":
+      case "Collected":
+        return { backgroundColor: "#49796B", color: "white" };
+      case "Waiting Ack.":
+      case "Waiting Resp.":
+        return { backgroundColor: "#E72636", color: "white" };
+      default:
+        return { backgroundColor: "default", color: "default" };
     }
   };
 
@@ -126,8 +132,16 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
           <TableCell sx={{ color: "white", padding: "16px" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <img
-                src={row.status === "Fixed" ? successIcon : alertIcon}
-                alt={row.status === "Fixed" ? "Success" : "Alert"}
+                src={
+                  row.status === "Cleaned" || row.status === "Collected"
+                    ? successIcon
+                    : alertIcon
+                }
+                alt={
+                  row.status === "Cleaned" || row.status === "Collected"
+                    ? "Success"
+                    : "Alert"
+                }
                 style={{ width: "28px", height: "28px", marginRight: "12px" }}
               />
               <Typography sx={{ color: "white", fontSize: "18px" }}>
@@ -197,24 +211,38 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
           </TableCell>
           <TableCell sx={{ color: "white", padding: "16px" }}>
             {row.acknowledgement === "Acknowledged" &&
-            row.status !== "Fixed" ? (
+            row.status !== "Cleaned" &&
+            row.status !== "Collected" ? (
               <Chip
-                label="Waiting Repair"
+                label={
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <img
+                      src={statusAlertIcon}
+                      alt="Status Alert"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        marginRight: "8px",
+                      }}
+                    />
+                    Waiting Resp.
+                  </Box>
+                }
                 sx={{
-                  ...getChipColor("Waiting Repair"),
+                  ...getChipColor("Waiting Resp."),
                   color: "white",
                   fontSize: "16px",
                   "&:hover": {
-                    backgroundColor: "red",
+                    backgroundColor: "#E72636",
                   },
                 }}
-                onClick={() => handleFix(row.id)}
+                onClick={() => handleFix(row.id, row.delayCategory)}
                 style={{ cursor: "pointer" }}
               />
-            ) : row.status === "Fixed" ? (
+            ) : row.status === "Cleaned" || row.status === "Collected" ? (
               <Box>
                 <Chip
-                  label="Fixed"
+                  label={row.status}
                   sx={{
                     backgroundColor: "green",
                     color: "white",
