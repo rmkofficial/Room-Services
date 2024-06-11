@@ -57,6 +57,7 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
           ...row,
           status: newStatus,
           fixedTime: formatDateTime(new Date()),
+          acknowledgement: "",
         };
       }
       return row;
@@ -75,6 +76,7 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
       case "Collected":
         return { backgroundColor: "#49796B", color: "white" };
       case "Waiting Ack.":
+      case "Waiting Repair":
       case "Waiting Resp.":
         return { backgroundColor: "#E72636", color: "white" };
       default:
@@ -195,7 +197,7 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
                     : "default",
                 "&:hover": {
                   backgroundColor:
-                    row.acknowledgement === "Waiting Ack." ? "red" : "",
+                    row.acknowledgement === "Waiting Ack." ? "#E72636" : "",
                 },
               }}
               onClick={() => {
@@ -210,9 +212,36 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
             {row.acknowledgement === "Waiting Ack." ? "" : row.ackTime}
           </TableCell>
           <TableCell sx={{ color: "white", padding: "16px" }}>
-            {row.acknowledgement === "Acknowledged" &&
-            row.status !== "Cleaned" &&
-            row.status !== "Collected" ? (
+            {row.acknowledgement === "Waiting Ack." ? (
+              <Chip
+                label={
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    {row.acknowledgement}
+                    <img
+                      src={waitingAckIcon}
+                      alt="Waiting Ack."
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        marginLeft: "8px",
+                      }}
+                    />
+                  </Box>
+                }
+                sx={{
+                  ...getChipColor(row.acknowledgement),
+                  color: "white",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "#E72636",
+                  },
+                }}
+                onClick={() => handleAcknowledge(row.id)}
+              />
+            ) : row.acknowledgement === "Acknowledged" &&
+              row.status !== "Cleaned" &&
+              row.status !== "Collected" ? (
               <Chip
                 label={
                   <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -244,7 +273,7 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
                 <Chip
                   label={row.status}
                   sx={{
-                    backgroundColor: "green",
+                    backgroundColor: "#49796B",
                     color: "white",
                     fontSize: "16px",
                   }}
@@ -253,19 +282,7 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
                   {row.fixedTime}
                 </Typography>
               </Box>
-            ) : (
-              <Chip
-                label={row.acknowledgement}
-                sx={{
-                  ...getChipColor(row.acknowledgement),
-                  color: "white",
-                  fontSize: "16px",
-                  "&:hover": {
-                    backgroundColor: "red",
-                  },
-                }}
-              />
-            )}
+            ) : null}
           </TableCell>
           <TableCell sx={{ padding: "16px" }}>
             <img
