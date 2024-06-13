@@ -23,7 +23,10 @@ const TableHeader = ({ order, orderBy, onRequestSort }) => {
           <TableCell
             key={headCell.id}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ color: "white", fontSize: "16px" }}
+            sx={{
+              color: "white",
+              fontSize: "16px",
+            }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
