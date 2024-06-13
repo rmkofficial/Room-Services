@@ -296,7 +296,7 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
               style={{
                 paddingLeft: "20px",
                 cursor: "pointer",
-                width: "36px",
+                width: "48px",
                 height: "24px",
               }}
             />
