@@ -151,7 +151,6 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
               </Typography>
             </Box>
           </TableCell>
-
           <TableCell sx={{ color: "white", padding: "16px" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {getCategoryIcon(row.delayCategory) && (
@@ -191,9 +190,12 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
                 ...getChipColor(row.acknowledgement),
                 backgroundColor:
                   row.acknowledgement === ""
-                    ? "rgba(71,70,71,255)"
+                    ? "transparent"
                     : getChipColor(row.acknowledgement).backgroundColor,
-                color: "white",
+                color:
+                  row.acknowledgement === ""
+                    ? "white"
+                    : getChipColor(row.acknowledgement).color,
                 fontSize: "16px",
                 cursor:
                   row.acknowledgement === "Waiting Ack."
@@ -216,36 +218,9 @@ const TableRows = ({ page, rowsPerPage, order, orderBy, data }) => {
             {row.acknowledgement === "Waiting Ack." ? "" : row.ackTime}
           </TableCell>
           <TableCell sx={{ color: "white", padding: "16px" }}>
-            {row.acknowledgement === "Waiting Ack." ? (
-              <Chip
-                label={
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    {row.acknowledgement}
-                    <img
-                      src={waitingAckIcon}
-                      alt="Waiting Ack."
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        marginLeft: "8px",
-                      }}
-                    />
-                  </Box>
-                }
-                sx={{
-                  ...getChipColor(row.acknowledgement),
-                  color: "white",
-                  fontSize: "16px",
-                  cursor: "pointer",
-                  "&:hover": {
-                    backgroundColor: "#E72636",
-                  },
-                }}
-                onClick={() => handleAcknowledge(row.id)}
-              />
-            ) : row.acknowledgement === "Acknowledged" &&
-              row.status !== "Cleaned" &&
-              row.status !== "Collected" ? (
+            {row.acknowledgement === "Acknowledged" &&
+            row.status !== "Cleaned" &&
+            row.status !== "Collected" ? (
               <Chip
                 label={
                   <Box sx={{ display: "flex", alignItems: "center" }}>
